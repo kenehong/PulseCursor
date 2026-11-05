@@ -1,0 +1,430 @@
+<Window
+    x:Class="LoadCursor.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoadCursor"
+    Title="PulseCursor settings">
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+    <UserControl
+        x:Name="SettingsRoot"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch">
+        <Grid Background="{ThemeResource SettingsWindowBackgroundBrush}">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="SettingsLayout">
+                    <VisualState x:Name="SettingsWide">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="560" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="ResourceOptions.Orientation" Value="Horizontal" />
+                            <Setter Target="ResourceOptions.Spacing" Value="24" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="SettingsNarrow">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="0" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="ResourceOptions.Orientation" Value="Vertical" />
+                            <Setter Target="ResourceOptions.Spacing" Value="8" />
+                            <Setter Target="SettingsContent.Padding" Value="16" />
+                            <Setter Target="NormalColorOptions.(Grid.Row)" Value="1" />
+                            <Setter Target="NormalColorOptions.(Grid.Column)" Value="0" />
+                            <Setter Target="NormalColorOptions.(Grid.ColumnSpan)" Value="2" />
+                            <Setter Target="NormalColorOptions.HorizontalAlignment" Value="Left" />
+                            <Setter Target="NormalColorOptions.Margin" Value="0,8,0,0" />
+                            <Setter Target="BusyColorOptions.(Grid.Row)" Value="1" />
+                            <Setter Target="BusyColorOptions.(Grid.Column)" Value="0" />
+                            <Setter Target="BusyColorOptions.(Grid.ColumnSpan)" Value="2" />
+                            <Setter Target="BusyColorOptions.HorizontalAlignment" Value="Left" />
+                            <Setter Target="BusyColorOptions.Margin" Value="0,8,0,0" />
+                            <Setter Target="HotColorOptions.(Grid.Row)" Value="1" />
+                            <Setter Target="HotColorOptions.(Grid.Column)" Value="0" />
+                            <Setter Target="HotColorOptions.(Grid.ColumnSpan)" Value="2" />
+                            <Setter Target="HotColorOptions.HorizontalAlignment" Value="Left" />
+                            <Setter Target="HotColorOptions.Margin" Value="0,8,0,0" />
+                            <Setter Target="CriticalColorOptions.(Grid.Row)" Value="1" />
+                            <Setter Target="CriticalColorOptions.(Grid.Column)" Value="0" />
+                            <Setter Target="CriticalColorOptions.(Grid.ColumnSpan)" Value="2" />
+                            <Setter Target="CriticalColorOptions.HorizontalAlignment" Value="Left" />
+                            <Setter Target="CriticalColorOptions.Margin" Value="0,8,0,0" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <ScrollViewer
+                x:Name="SettingsScroll"
+                HorizontalContentAlignment="Stretch"
+                HorizontalScrollMode="Disabled"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="SettingsContent" MaxWidth="640" Padding="20" Spacing="20">
+                    <TextBlock
+                        Style="{StaticResource TitleTextBlockStyle}"
+                        Text="Settings"
+                        TextWrapping="Wrap" />
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Appearance"
+                            TextWrapping="Wrap" />
+                        <Border
+                            Padding="12"
+                            Background="{ThemeResource SettingsCardBackgroundBrush}"
+                            BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                            BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                Header="Theme"
+                                SelectedIndex="{x:Bind Settings.Theme, Mode=TwoWay}">
+                                <ComboBoxItem Content="System" />
+                                <ComboBoxItem Content="Light" />
+                                <ComboBoxItem Content="Dark" />
+                            </ComboBox>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Resources"
+                            TextWrapping="Wrap" />
+                        <Border
+                            Padding="12"
+                            Background="{ThemeResource SettingsCardBackgroundBrush}"
+                            BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                            BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <StackPanel x:Name="ResourceOptions" Spacing="8">
+                                <CheckBox
+                                    Content="CPU"
+                                    IsChecked="{x:Bind Settings.MonitorCpu, Mode=TwoWay}" />
+                                <CheckBox
+                                    Content="GPU"
+                                    IsChecked="{x:Bind Settings.MonitorGpu, Mode=TwoWay}" />
+                                <CheckBox
+                                    Content="Memory"
+                                    IsChecked="{x:Bind Settings.MonitorMemory, Mode=TwoWay}" />
+                            </StackPanel>
+                        </Border>
+                        <InfoBar
+                            IsOpen="{x:Bind Settings.NoResourcesSelected, Mode=OneWay}"
+                            IsClosable="False"
+                            Title="Monitoring paused"
+                            Message="Select a resource to resume."
+                            AutomationProperties.LiveSetting="Polite" />
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Sensitivity"
+                            TextWrapping="Wrap" />
+                        <Border
+                            Padding="12"
+                            Background="{ThemeResource SettingsCardBackgroundBrush}"
+                            BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                            BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <RadioButtons
+                                SelectedIndex="{x:Bind Settings.Sensitivity, Mode=TwoWay}"
+                                AutomationProperties.Name="Sensitivity">
+                                <RadioButton HorizontalContentAlignment="Stretch" AutomationProperties.Name="Sensitive">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Sensitive" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Switch at 50%, 70%, 90%"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </RadioButton>
+                                <RadioButton HorizontalContentAlignment="Stretch" AutomationProperties.Name="Balanced">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Balanced" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Switch at 60%, 80%, 95%"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </RadioButton>
+                                <RadioButton HorizontalContentAlignment="Stretch" AutomationProperties.Name="Relaxed">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Relaxed" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Switch at 70%, 88%, 97%"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </RadioButton>
+                                <RadioButton HorizontalContentAlignment="Stretch" AutomationProperties.Name="Custom">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Custom" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Keep current thresholds"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </RadioButton>
+                            </RadioButtons>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Thresholds and colors"
+                            TextWrapping="Wrap" />
+                        <Border
+                            Background="{ThemeResource SettingsCardBackgroundBrush}"
+                            BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                            BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <StackPanel>
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="Normal" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Below Busy"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <StackPanel x:Name="NormalColorOptions" Grid.Column="1"
+                                                HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                        <Image x:Name="NormalCursorPreview" Width="32" Height="32"
+                                               Source="{x:Bind NormalPreview, Mode=OneWay}" Stretch="Uniform"
+                                               AutomationProperties.Name="Normal cursor preview" />
+                                        <local:ColorSelector VerticalAlignment="Center"
+                                            Color="{x:Bind Settings.NormalColorValue, Mode=TwoWay}"
+                                            Label="Normal cursor color" />
+                                    </StackPanel>
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <NumberBox
+                                        x:Name="BusyThresholdInput"
+                                        MinWidth="124"
+                                        MaxWidth="160"
+                                        Minimum="1"
+                                        Maximum="100"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Compact"
+                                        ValidationMode="Disabled"
+                                        Value="{x:Bind Settings.BusyThreshold, Mode=OneWay}"
+                                        ValueChanged="OnThresholdChanged"
+                                        AutomationProperties.Name="Busy threshold, percent">
+                                        <NumberBox.Header>
+                                            <TextBlock Text="Busy (%)" TextWrapping="Wrap" />
+                                        </NumberBox.Header>
+                                    </NumberBox>
+                                    <StackPanel x:Name="BusyColorOptions" Grid.Column="1"
+                                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+                                        <Image x:Name="BusyCursorPreview" Width="32" Height="32"
+                                               Source="{x:Bind BusyPreview, Mode=OneWay}" Stretch="Uniform"
+                                               AutomationProperties.Name="Busy cursor preview" />
+                                        <local:ColorSelector VerticalAlignment="Center"
+                                            Color="{x:Bind Settings.BusyColorValue, Mode=TwoWay}"
+                                            Label="Busy cursor color" />
+                                    </StackPanel>
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <NumberBox
+                                        x:Name="HotThresholdInput"
+                                        MinWidth="124"
+                                        MaxWidth="160"
+                                        Minimum="1"
+                                        Maximum="100"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Compact"
+                                        ValidationMode="Disabled"
+                                        Value="{x:Bind Settings.HotThreshold, Mode=OneWay}"
+                                        ValueChanged="OnThresholdChanged"
+                                        AutomationProperties.Name="High load threshold, percent">
+                                        <NumberBox.Header>
+                                            <TextBlock Text="High load (%)" TextWrapping="Wrap" />
+                                        </NumberBox.Header>
+                                    </NumberBox>
+                                    <StackPanel x:Name="HotColorOptions" Grid.Column="1"
+                                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+                                        <Image x:Name="HotCursorPreview" Width="32" Height="32"
+                                               Source="{x:Bind HotPreview, Mode=OneWay}" Stretch="Uniform"
+                                               AutomationProperties.Name="High load cursor preview" />
+                                        <local:ColorSelector VerticalAlignment="Center"
+                                            Color="{x:Bind Settings.HotColorValue, Mode=TwoWay}"
+                                            Label="High load cursor color" />
+                                    </StackPanel>
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <NumberBox
+                                        x:Name="CriticalThresholdInput"
+                                        MinWidth="124"
+                                        MaxWidth="160"
+                                        Minimum="1"
+                                        Maximum="100"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Compact"
+                                        ValidationMode="Disabled"
+                                        Value="{x:Bind Settings.CriticalThreshold, Mode=OneWay}"
+                                        ValueChanged="OnThresholdChanged"
+                                        AutomationProperties.Name="Critical threshold, percent">
+                                        <NumberBox.Header>
+                                            <TextBlock Text="Critical (%)" TextWrapping="Wrap" />
+                                        </NumberBox.Header>
+                                    </NumberBox>
+                                    <StackPanel x:Name="CriticalColorOptions" Grid.Column="1"
+                                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+                                        <Image x:Name="CriticalCursorPreview" Width="32" Height="32"
+                                               Source="{x:Bind CriticalPreview, Mode=OneWay}" Stretch="Uniform"
+                                               AutomationProperties.Name="Critical cursor preview" />
+                                        <local:ColorSelector VerticalAlignment="Center"
+                                            Color="{x:Bind Settings.CriticalColorValue, Mode=TwoWay}"
+                                            Label="Critical cursor color" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <InfoBar
+                            x:Name="ValidationMessage"
+                            IsClosable="False"
+                            Severity="Error"
+                            Title="Check the thresholds"
+                            AutomationProperties.LiveSetting="Assertive" />
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Behavior"
+                            TextWrapping="Wrap" />
+                        <Border
+                            Background="{ThemeResource SettingsCardBackgroundBrush}"
+                            BorderBrush="{ThemeResource SettingsCardBorderBrush}"
+                            BorderThickness="{ThemeResource SettingsCardBorderThickness}"
+                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                            <StackPanel>
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="Pulse ring at critical load" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind Settings.CriticalDescription, Mode=OneWay}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        IsOn="{x:Bind Settings.PulseOnCritical, Mode=TwoWay}"
+                                        AutomationProperties.Name="Pulse ring at critical load"
+                                        AutomationProperties.HelpText="{x:Bind Settings.CriticalDescription, Mode=OneWay}" />
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="Hold Shift for details" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Show resource usage and the top CPU app near the cursor."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        IsOn="{x:Bind Settings.ShiftDetails, Mode=TwoWay}"
+                                        AutomationProperties.Name="Hold Shift for details" />
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="Pause in full-screen apps" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Keep the default cursor in full-screen apps and games."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        IsOn="{x:Bind Settings.PauseInFullscreen, Mode=TwoWay}"
+                                        AutomationProperties.Name="Pause in full-screen apps" />
+                                </Grid>
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                                <Grid Padding="12" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="Pause in energy saver" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="Stop sampling to reduce battery use."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        IsOn="{x:Bind Settings.PauseInEnergySaver, Mode=TwoWay}"
+                                        AutomationProperties.Name="Pause in energy saver" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </UserControl>
+</Window>

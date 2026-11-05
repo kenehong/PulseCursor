@@ -1,0 +1,168 @@
+<Window
+    x:Class="LoadCursor.PeekCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoadCursor"
+    Title="PulseCursor">
+    <UserControl
+        x:Name="CardControl"
+        MaxWidth="330"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+        Background="{ThemeResource PulseSurfaceBrush}">
+        <Border
+            x:Name="Surface"
+            Background="{ThemeResource PulseSurfaceBrush}"
+            BackgroundSizing="InnerBorderEdge"
+            BorderBrush="{ThemeResource PulseBorderBrush}"
+            BorderThickness="{ThemeResource PulseBorderThickness}"
+            CornerRadius="{ThemeResource OverlayCornerRadius}">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="HeaderSeverityStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Target="HeaderStateRun.Foreground" Value="{ThemeResource PulseNormalBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Busy">
+                        <VisualState.Setters>
+                            <Setter Target="HeaderStateRun.Foreground" Value="{ThemeResource PulseBusyBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Hot">
+                        <VisualState.Setters>
+                            <Setter Target="HeaderStateRun.Foreground" Value="{ThemeResource PulseHotBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Critical">
+                        <VisualState.Setters>
+                            <Setter Target="HeaderStateRun.Foreground" Value="{ThemeResource PulseCriticalBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <ScrollViewer
+                x:Name="CardScroll"
+                HorizontalContentAlignment="Stretch"
+                HorizontalScrollMode="Disabled"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ContentPanel" Padding="16">
+                    <TextBlock
+                        Margin="0,0,0,4"
+                        Foreground="{ThemeResource PulseMutedTextBrush}"
+                        Style="{StaticResource PulseTextStyle}"
+                        TextWrapping="Wrap">
+                        <Run Text="pulse · 1s refresh · " />
+                        <Run x:Name="HeaderStateRun"
+                             Foreground="{ThemeResource PulseNormalBrush}"
+                             Text="{x:Bind Model.HeaderState, Mode=OneWay}" />
+                    </TextBlock>
+                    <local:PulseMeter
+                        Visibility="{x:Bind Model.CpuEnabled, Mode=OneWay}"
+                        Label="CPU"
+                        Text="{x:Bind Model.CpuText, Mode=OneWay}"
+                        Bars="{x:Bind Model.CpuBars, Mode=OneWay}"
+                        Status="{x:Bind Model.CpuStatus, Mode=OneWay}" />
+                    <local:PulseMeter
+                        Visibility="{x:Bind Model.GpuEnabled, Mode=OneWay}"
+                        Label="GPU"
+                        Text="{x:Bind Model.GpuText, Mode=OneWay}"
+                        Bars="{x:Bind Model.GpuBars, Mode=OneWay}"
+                        Status="{x:Bind Model.GpuStatus, Mode=OneWay}"
+                        AutomationProperties.HelpText="{x:Bind Model.GpuNote, Mode=OneWay}"
+                        ToolTipService.ToolTip="{x:Bind Model.GpuNote, Mode=OneWay}" />
+                    <local:PulseMeter
+                        Visibility="{x:Bind Model.MemoryEnabled, Mode=OneWay}"
+                        Label="MEM"
+                        Text="{x:Bind Model.MemoryText, Mode=OneWay}"
+                        Bars="{x:Bind Model.MemoryBars, Mode=OneWay}"
+                        Status="{x:Bind Model.MemoryStatus, Mode=OneWay}" />
+                    <Border Margin="0,8" Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                    <Grid ColumnSpacing="8" Visibility="{x:Bind Model.CpuEnabled, Mode=OneWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            MinWidth="56"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource PulseMutedTextBrush}"
+                            Style="{StaticResource PulseTextStyle}"
+                            Text="CPU top"
+                            AutomationProperties.Name="Top CPU app" />
+                        <Image
+                            Grid.Column="1"
+                            Width="16"
+                            Height="16"
+                            VerticalAlignment="Center"
+                            Visibility="{x:Bind Model.CpuApp.IconVisibility, Mode=OneWay}"
+                            Source="{x:Bind Model.CpuApp.Icon, Mode=OneWay}"
+                            Stretch="UniformToFill"
+                            AutomationProperties.AccessibilityView="Raw" />
+                        <FontIcon
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                            FontSize="16"
+                            Foreground="{ThemeResource PulseMutedTextBrush}"
+                            Visibility="{x:Bind Model.CpuApp.FallbackVisibility, Mode=OneWay}"
+                            Glyph="&#xE8A5;"
+                            AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource PulseStrongTextStyle}"
+                            Text="{x:Bind Model.CpuApp.Name, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            AutomationProperties.HelpText="{x:Bind Model.CpuApp.Note, Mode=OneWay}">
+                            <ToolTipService.ToolTip>
+                                <ToolTip>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Bind Model.CpuApp.Text, Mode=OneWay}" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind Model.CpuApp.Note, Mode=OneWay}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Grid.Column="3"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource PulseStrongTextStyle}"
+                            Text="{x:Bind Model.CpuApp.Usage, Mode=OneWay}"
+                            TextAlignment="Right" />
+                    </Grid>
+                    <Grid Margin="0,8,0,0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource PulseMutedTextBrush}"
+                            Style="{StaticResource PulseTextStyle}"
+                            Text="Hold Shift · release to hide"
+                            TextWrapping="Wrap" />
+                        <HyperlinkButton
+                            Grid.Column="1"
+                            MinWidth="28"
+                            MinHeight="28"
+                            Padding="4"
+                            VerticalAlignment="Center"
+                            Click="OnOpenTaskManager"
+                            AutomationProperties.Name="Open Task Manager"
+                            ToolTipService.ToolTip="Open Task Manager">
+                            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="16" Glyph="&#xE8A7;" />
+                        </HyperlinkButton>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </UserControl>
+</Window>

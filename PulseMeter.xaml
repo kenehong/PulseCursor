@@ -1,0 +1,64 @@
+<UserControl
+    x:Class="LoadCursor.PulseMeter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    HorizontalContentAlignment="Stretch">
+    <Grid ColumnSpacing="8">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="SeverityStates">
+                <VisualState x:Name="Normal">
+                    <VisualState.Setters>
+                        <Setter Target="MeterCells.Foreground" Value="{ThemeResource PulseIdleBrush}" />
+                        <Setter Target="Reading.Foreground" Value="{ThemeResource PulseNormalBrush}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Busy">
+                    <VisualState.Setters>
+                        <Setter Target="MeterCells.Foreground" Value="{ThemeResource PulseBusyBrush}" />
+                        <Setter Target="Reading.Foreground" Value="{ThemeResource PulseBusyBrush}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Hot">
+                    <VisualState.Setters>
+                        <Setter Target="MeterCells.Foreground" Value="{ThemeResource PulseHotBrush}" />
+                        <Setter Target="Reading.Foreground" Value="{ThemeResource PulseHotBrush}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Critical">
+                    <VisualState.Setters>
+                        <Setter Target="MeterCells.Foreground" Value="{ThemeResource PulseCriticalBrush}" />
+                        <Setter Target="Reading.Foreground" Value="{ThemeResource PulseCriticalBrush}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            MinWidth="32"
+            VerticalAlignment="Center"
+            Style="{StaticResource PulseTextStyle}"
+            Text="{x:Bind Label, Mode=OneWay}"
+            AutomationProperties.AccessibilityView="Raw" />
+        <TextBlock
+            x:Name="MeterCells"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Style="{StaticResource PulseTextStyle}"
+            TextWrapping="Wrap"
+            AutomationProperties.AccessibilityView="Raw">
+            <Run Text="{x:Bind Filled(Bars), Mode=OneWay}" /><Run Foreground="{ThemeResource PulseIdleBrush}" Text="{x:Bind Empty(Bars), Mode=OneWay}" />
+        </TextBlock>
+        <TextBlock
+            x:Name="Reading"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            Style="{StaticResource PulseStrongTextStyle}"
+            Text="{x:Bind Text, Mode=OneWay}"
+            TextAlignment="Right"
+            AutomationProperties.Name="{x:Bind Describe(Label, Text, Status), Mode=OneWay}" />
+    </Grid>
+</UserControl>
