@@ -28,7 +28,7 @@ files are bundled next to the executable. No administrator access, driver,
 installer, background service or startup registration.
 
 ```powershell
-Set-Location .\load-cursor
+Set-Location .\PulseCursor
 dotnet build -c Release
 .\bin\Release\winui\PulseCursor.exe --settings
 ```
